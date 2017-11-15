@@ -1,34 +1,35 @@
-
 """
-Прочитать из файла (имя - параметр командной строки)
-все слова (разделитель пробел)
+    РџСЂРѕС‡РёС‚Р°С‚СЊ РёР· С„Р°Р№Р»Р° (РёРјСЏ - РїР°СЂР°РјРµС‚СЂ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё)
+    РІСЃРµ СЃР»РѕРІР° (СЂР°Р·РґРµР»РёС‚РµР»СЊ РїСЂРѕР±РµР»)
 
-Создать "Похожий" словарь который отображает каждое слово из файла
-на список всех слов, которые следуют за ним (все варианты).
+    РЎРѕР·РґР°С‚СЊ "РџРѕС…РѕР¶РёР№" СЃР»РѕРІР°СЂСЊ РєРѕС‚РѕСЂС‹Р№ РѕС‚РѕР±СЂР°Р¶Р°РµС‚ РєР°Р¶РґРѕРµ СЃР»РѕРІРѕ РёР· С„Р°Р№Р»Р°
+    РЅР° СЃРїРёСЃРѕРє РІСЃРµС… СЃР»РѕРІ, РєРѕС‚РѕСЂС‹Рµ СЃР»РµРґСѓСЋС‚ Р·Р° РЅРёРј (РІСЃРµ РІР°СЂРёР°РЅС‚С‹).
 
-Список слов может быть в любом порядке и включать повторения.
-например "and" ['best", "then", "after", "then", ...]
+    РЎРїРёСЃРѕРє СЃР»РѕРІ РјРѕР¶РµС‚ Р±С‹С‚СЊ РІ Р»СЋР±РѕРј РїРѕСЂСЏРґРєРµ Рё РІРєР»СЋС‡Р°С‚СЊ РїРѕРІС‚РѕСЂРµРЅРёСЏ.
+    РЅР°РїСЂРёРјРµСЂ "and" ['best", "then", "after", "then", ...]
 
-Считаем , что пустая строка предшествует всем словам в файле.
+    РЎС‡РёС‚Р°РµРј , С‡С‚Рѕ РїСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР° РїСЂРµРґС€РµСЃС‚РІСѓРµС‚ РІСЃРµРј СЃР»РѕРІР°Рј РІ С„Р°Р№Р»Рµ.
 
-С помощью "Похожего" словаря сгенерировать новый текст
-похожий на оригинал.
-Т.е. напечатать слово - посмотреть какое может быть следующим
-и выбрать случайное.
+    РЎ РїРѕРјРѕС‰СЊСЋ "РџРѕС…РѕР¶РµРіРѕ" СЃР»РѕРІР°СЂСЏ СЃРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ РЅРѕРІС‹Р№ С‚РµРєСЃС‚
+    РїРѕС…РѕР¶РёР№ РЅР° РѕСЂРёРіРёРЅР°Р».
+    Рў.Рµ. РЅР°РїРµС‡Р°С‚Р°С‚СЊ СЃР»РѕРІРѕ - РїРѕСЃРјРѕС‚СЂРµС‚СЊ РєР°РєРѕРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ СЃР»РµРґСѓСЋС‰РёРј
+    Рё РІС‹Р±СЂР°С‚СЊ СЃР»СѓС‡Р°Р№РЅРѕРµ.
 
-В качестве теста можно использовать вывод программы как вход.парам. для следующей копии
-(для первой вход.парам. - файл)
+    Р’ РєР°С‡РµСЃС‚РІРµ С‚РµСЃС‚Р° РјРѕР¶РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РІС‹РІРѕРґ РїСЂРѕРіСЂР°РјРјС‹ РєР°Рє РІС…РѕРґ.РїР°СЂР°Рј. РґР»СЏ СЃР»РµРґСѓСЋС‰РµР№ РєРѕРїРёРё
+    (РґР»СЏ РїРµСЂРІРѕР№ РІС…РѕРґ.РїР°СЂР°Рј. - С„Р°Р№Р»)
 
-Файл:
-He is not what he should be
-He is not what he need to be
-But at least he is not what he used to be
-  (c) Team Coach
+    Р¤Р°Р№Р»:
+    He is not what he should be
+    He is not what he need to be
+    But at least he is not what he used to be
+      (c) Team Coach
 
 
 """
 
 import codecs
+import random
+import re
 import sys
 
 
@@ -42,7 +43,7 @@ def read_data(filename):
     return codecs.open(filename, 'r').read()
 
 
-def get_files(args):
+def get_filenames(args):
     if not args:
         print('use: [--file] file [file ...]')
         sys.exit(1)
@@ -55,13 +56,54 @@ def get_files(args):
     return valid_files
 
 
-def mem_dict(filename):
-    work_dict = dict()
-    return
+def mem_dict(file_data):
+    word_dict = dict()
+    for newline in re.compile('\n').split(file_data):
+        prev_word = None
+        for word in re.compile(' +').split(newline):
+            # Update prev word
+            if prev_word is not None:
+                prev_words_associated = word_dict.get(prev_word)
+                prev_words_associated.append(word)
+                word_dict.update({prev_word: prev_words_associated})
+
+            # Update current word
+            words_associated = word_dict.get(word)
+            if words_associated is None:
+                words_associated = list()
+            if prev_word is not None:
+                words_associated.append(prev_word)
+            prev_word = word
+            word_dict.update({word: words_associated})
+
+    return word_dict
+
+
+def print_phrase(phrase):
+    result = ""
+    for w in phrase:
+        result += w + " "
+    print(result)
 
 
 def main():
-    files = get_files(sys.argv[1:])
+    files = get_filenames(sys.argv[1:])
+    for file in files:
+        words_dict = mem_dict(read_data(file))
+        keys = list(words_dict.keys())
+        first_word = keys[random.randint(0, len(keys) - 1)]
+        phrase = list()
+        phrase.append(first_word)
+        words_associated = words_dict.get(first_word)
+
+        for i in range(10):
+            next_word = words_associated[random.randint(0, len(words_associated) - 1)]
+            words_associated = words_dict.get(next_word)
+            if words_associated is None:
+                break
+            phrase.append(next_word)
+
+        print_phrase(phrase)
 
 
 if __name__ == '__main__':

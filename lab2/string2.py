@@ -43,6 +43,5 @@ def main():
     print(change_ending("5 - tiig"))
 
 
-
 if __name__ == '__main__':
     main()

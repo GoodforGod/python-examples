@@ -20,7 +20,7 @@ def read_data(filename):
     return codecs.open(filename, 'r').read()
 
 
-def get_files(args):
+def get_filenames(args):
     if not args:
         print('use: [--file] file [file ...]')
         sys.exit(1)
@@ -33,8 +33,7 @@ def get_files(args):
     return valid_files
 
 
-def read_names_dict(filename):
-    file_data = read_data(filename)
+def read_names_dict(file_data):
     name_book = dict()
     for match in re.finditer("<tr align=\"[a-zA-Z]+\"><td>[0-9]+</td><td>[a-zA-Z]+</td><td>[a-zA-Z]+</td>", file_data):
         m_values = list()
@@ -63,8 +62,8 @@ def print_names(names_dict, filename):
 # напечатать ТОП-10 муж и жен имен из всех переданных файлов
 # для каждого переданного аргументом имени файла, вывести имена   extract_name
 def main():
-    for filename in get_files(sys.argv[1:]):
-        names_dict = read_names_dict(filename)
+    for filename in get_filenames(sys.argv[1:]):
+        names_dict = read_names_dict(read_data(filename))
         if names_dict is None:
             continue
 
