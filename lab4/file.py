@@ -1,3 +1,4 @@
+
 """
 ѕрочитать из файла (им€ - параметр командной строки)
 все слова (разделитель пробел)
@@ -6,13 +7,13 @@
 на список всех слов, которые следуют за ним (все варианты).
 
 —писок слов может быть в любом пор€дке и включать повторени€.
-например "and" ['best", "then", "after", "then", ...] 
+например "and" ['best", "then", "after", "then", ...]
 
 —читаем , что пуста€ строка предшествует всем словам в файле.
 
 — помощью "ѕохожего" словар€ сгенерировать новый текст
 похожий на оригинал.
-“.е. напечатать слово - посмотреть какое может быть следующим 
+“.е. напечатать слово - посмотреть какое может быть следующим
 и выбрать случайное.
 
 ¬ качестве теста можно использовать вывод программы как вход.парам. дл€ следующей копии
@@ -27,13 +28,40 @@ But at least he is not what he used to be
 
 """
 
+import codecs
+import sys
+
+
+def to_filename(filename):
+    if filename is not None and filename != "":
+        return filename
+    return None
+
+
+def read_data(filename):
+    return codecs.open(filename, 'r').read()
+
+
+def get_files(args):
+    if not args:
+        print('use: [--file] file [file ...]')
+        sys.exit(1)
+    valid_files = list()
+    for filename in args:
+        if to_filename(filename) is None:
+            print('* Invalid filename - [%s]' % filename)
+            continue
+        valid_files.append(filename)
+    return valid_files
+
 
 def mem_dict(filename):
+    work_dict = dict()
     return
 
 
 def main():
-    print(' ')
+    files = get_files(sys.argv[1:])
 
 
 if __name__ == '__main__':
