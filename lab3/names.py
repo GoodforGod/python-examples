@@ -51,7 +51,8 @@ def remove_tags(tagged_value):
     return tagged_value[4:-5]
 
 
-def print_names(names_dict):
+def print_sorted_by_names(names_dict):
+    print("Sorted by names")
     names = list(names_dict.keys())
     names.sort()
     for i in range(10):
@@ -68,11 +69,11 @@ def main():
     for filename in get_filenames(sys.argv[1:]):
         man_dict, woman_dict = read_names_dict(read_data(filename))
         if man_dict is not None:
-            print("Top 10 man names from (sorted by name) - ", filename)
-            print_names(man_dict)
-        if man_dict is not None:
-            print("Top 10 woman names from (sorted by name) - ", filename)
-            print_names(woman_dict)
+            print("Top 10 man names from - ", filename)
+            print_sorted_by_names(man_dict)
+        if woman_dict is not None:
+            print("Top 10 woman names from - ", filename)
+            print_sorted_by_names(woman_dict)
 
 
 if __name__ == '__main__':
