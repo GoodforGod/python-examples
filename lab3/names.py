@@ -34,40 +34,45 @@ def get_filenames(args):
 
 
 def read_names_dict(file_data):
-    name_book = dict()
+    man_book = dict()
+    woman_book = dict()
     for match in re.finditer("<tr align=\"[a-zA-Z]+\"><td>[0-9]+</td><td>[a-zA-Z]+</td><td>[a-zA-Z]+</td>", file_data):
         m_values = list()
         for tag in re.finditer('<td *[0-9a-zA-Z"=]*> *[0-9a-zA-Z]+ *</td>', match.group()):
             m_values.append(remove_tags(tag.group()))
         if len(m_values) != 3:
             continue
-        name_book.update({int(m_values[0]): [m_values[1], m_values[2]]})
-    return name_book
+        man_book.update({m_values[1]: int(m_values[0])})
+        woman_book.update({m_values[2]: int(m_values[0])})
+    return man_book, woman_book
 
 
 def remove_tags(tagged_value):
     return tagged_value[4:-5]
 
 
-def print_names(names_dict, filename):
-    print("Top 10 names from - ", filename)
+def print_names(names_dict):
+    names = list(names_dict.keys())
+    names.sort()
     for i in range(10):
-        name_list = names_dict.get(i)
-        if name_list is None:
-            continue
+        name_position = names_dict.get(names[i])
+        if name_position is None:
+            name_position = -1
 
-        print("Position - %s, [M]- %s, [W] - %s" % (i, name_list[0], name_list[1]))
+        print("Position - %s, Name - %s" % (name_position, names[i]))
 
 
 # напечатать ТОП-10 муж и жен имен из всех переданных файлов
 # для каждого переданного аргументом имени файла, вывести имена   extract_name
 def main():
     for filename in get_filenames(sys.argv[1:]):
-        names_dict = read_names_dict(read_data(filename))
-        if names_dict is None:
-            continue
-
-        print_names(names_dict, filename)
+        man_dict, woman_dict = read_names_dict(read_data(filename))
+        if man_dict is not None:
+            print("Top 10 man names from (sorted by name) - ", filename)
+            print_names(man_dict)
+        if man_dict is not None:
+            print("Top 10 woman names from (sorted by name) - ", filename)
+            print_names(woman_dict)
 
 
 if __name__ == '__main__':
