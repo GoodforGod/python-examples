@@ -129,18 +129,36 @@ def setup():
             for num, name in names_dict.items():
                 i += 1
                 names.update({i: name})
-    print(names)
-    rand_num = random.randint(0, len(names) - 1)
+
+
+def get_pic_link(level):
+    if level > 3:
+        level = 3
+    diff_level = difficulty.get(level)
+
+    if names is None or len(names) < 1:
+        print("Names are not presented")
+        return None
+
+    rand_num = random.randint(0, diff_level)
     rand_name = names.get(rand_num)
+
     google_url = build_google_url(rand_name)
     page_data = extract_page_data(google_url)
+
     link = extract_pic_link(page_data, 10)
-    print(rand_name)
-    print(link)
+    return rand_name, link
+
+
+def test():
+    setup()
+    n, l = get_pic_link(2)
+    print(n)
+    print(l)
 
 
 def main():
-    setup()
+    test()
 
 
 if __name__ == '__main__':
