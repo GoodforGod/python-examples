@@ -22,10 +22,10 @@ game_page = "Great, lets begin!" \
             "</form>"
 
 guessed_page = "{0} <br><br><a href=\"http://localhost:5000/play/{1}\">Try again</a>"
-
 body_template = "<html lang=\"en\"><head><meta charset=\"UTF-8\"><title> {0} </title></head><body> {1} </body></html>"
 
 state = dict()
+
 
 """
 START WITH
